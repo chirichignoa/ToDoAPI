@@ -12,24 +12,22 @@ mongoClient.connect(`${config.DB_URL}${config.PORT}/${config.DB_NAME}`, (err, cl
     console.log('Connected to MongoDB server.');
     const db = client.db('TodoApp');
 
-    // db.collection('todo').find({ completed: true }).toArray().then((docs) => {
-    //     console.log('To-do');
-    //     console.log(JSON.stringify(docs, undefined, 2));
-    // }, (err) => {
-    //     console.log('Error', err);
-    // });
 
-    db.collection('todo').find().count().then((count) => {
-        console.log(`To-dos count: ${count}`);
-    }, (err) => {
-        console.log('Error', err);
+    db.collection('todo').findOneAndUpdate({
+        id: new ObjectID("5be3919faefda8057ea5f61b")
+    }, {
+        $set: {
+            completed: true
+        },
+        $inc: {
+            age: 1
+        }
+    }, {
+        returnOriginal: false
+    }).then((result) => {
+        console.log(result);
     });
 
-    db.collection('user').find({ name: "Agustin" }).count().then((count) => {
-        console.log(`User count: ${count}`);
-    }, (err) => {
-        console.log('Error', err);
-    });
 
     client.close();
     console.log('Connection closed.');
