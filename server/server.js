@@ -16,9 +16,9 @@ app.post('/todos', (req, res) => {
     });
 
     todo.save().then((doc) => {
-        res.status(200).send(JSON.stringify(doc, undefined, 2));
+        res.status(200).send(doc); //JSON.stringify(doc, undefined, 2));
     }, (err) => {
-        res.status(400).send(JSON.stringify({ error: err.message }, undefined, 2));
+        res.status(400).send(err); //JSON.stringify({ error: err.message }, undefined, 2));
     });
 });
 
@@ -29,3 +29,5 @@ app.get('/todos', (req, res) => {
 app.listen(port, () => {
     console.log(`Listening at: ${port}`);
 });
+
+module.exports = { app };
