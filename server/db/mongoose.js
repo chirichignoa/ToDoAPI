@@ -7,6 +7,6 @@ const config = {
 };
 
 mongoose.Promise = global.Promise;
-mongoose.connect(`${config.DB_URL}${config.PORT}/${config.DB_NAME}`);
+mongoose.connect(`${config.DB_URL}${config.PORT}/${config.DB_NAME}`, { useNewUrlParser: true });
 
 module.exports = { mongoose };
