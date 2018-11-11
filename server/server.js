@@ -23,7 +23,11 @@ app.post('/todos', (req, res) => {
 });
 
 app.get('/todos', (req, res) => {
-
+    Todo.find().then((docs) => {
+        res.status(200).send({ docs });
+    }, (error) => {
+        res.status(400).send(err);
+    })
 });
 
 app.listen(port, () => {
