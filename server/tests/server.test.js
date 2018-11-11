@@ -5,8 +5,12 @@ const { app } = require('../server');
 const { Todo } = require('../models/todo');
 const { mongoose } = require('../db/mongoose');
 
+const todos = [{ text: 'First dummy todo' }, { text: 'Second dummy todo' }]
+
 beforeEach((done) => {
-    Todo.deleteMany({}).then(() => done());
+    Todo.deleteMany({}).then(() => {
+        return Todo.insertMany(todos);
+    }).then(() => done());
 });
 
 afterAll(() => mongoose.disconnect());
@@ -25,7 +29,7 @@ describe('POST /todos', () => {
                 if (err) {
                     return done(err);
                 }
-                Todo.find().then((todos) => {
+                Todo.find({ text }).then((todos) => {
                     expect(todos.length).toBe(1);
                     expect(todos[0].text).toBe(text);
                     done();
@@ -43,9 +47,28 @@ describe('POST /todos', () => {
                     return done(err);
                 }
                 Todo.find().then((todos) => {
-                    expect(todos.length).toBe(0);
+                    expect(todos.length).toBe(2);
                     done();
                 }).catch((err) => done(err));
             });
     }, 30000);
+});
+
+describe("GET /todos", () => {
+
+    it("Should get all todos", () => {
+        request(app)
+            .get('/todos')
+            .expect(200)
+            .expect((res) => {
+                expect(res.body.todos.length).toBe(2);
+            })
+            .end((err, res) => {
+                if (err) {
+                    return done(err);
+                }
+            })
+    }, 30000);
+
+
 });
