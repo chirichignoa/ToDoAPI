@@ -5,6 +5,8 @@ const { mongoose } = require('./db/mongoose');
 const { Todo } = require('./models/todo');
 const { User } = require('./models/user');
 
+const { ObjectID } = require('mongodb');
+
 let app = express();
 let port = 3000;
 
@@ -28,6 +30,22 @@ app.get('/todos', (req, res) => {
     }, (error) => {
         res.status(400).send(err);
     })
+});
+
+app.get('/todos/:id', (req, res) => {
+    let id = req.params.id;
+    if (!id) {
+        return res.status(400).send("The request does not have necesary params.");
+    }
+    if (!ObjectID.isValid(id)) {
+        return res.status(404).send("Id not found");
+    }
+    Todo.findById(id).then((todo) => {
+        if (!todo) {
+            return res.status(404).send("Id not found");
+        }
+        return res.status(200).send(todo);
+    }).catch((err) => res.status(400).send());
 });
 
 app.listen(port, () => {
