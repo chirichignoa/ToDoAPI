@@ -1,7 +1,7 @@
 const request = require('supertest');
 
 const { app } = require('../server');
-
+const { ObjectID } = require('mongodb');
 const { Todo } = require('../models/todo');
 const { mongoose } = require('../db/mongoose');
 
@@ -85,11 +85,16 @@ describe('GET /todos/:id', () => {
             .expect((res) => {
                 expect(res.body.todo.text).toBe(todos[0].text);
             })
-            .end(done);
+            .end((err, res) => {
+                if (err) {
+                    return done(err);
+                }
+            });
     });
 
     it('should return 404 if todo not found', (done) => {
-        var hexId = new ObjectID().toHexString();
+        //var hexId = new ObjectID().toHexString();
+        let hexId = "5beb63c58a17534309eceba2";
 
         request(app)
             .get(`/todos/${hexId}`)

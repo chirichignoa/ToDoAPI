@@ -8,7 +8,7 @@ const { User } = require('./models/user');
 const { ObjectID } = require('mongodb');
 
 let app = express();
-let port = 3000;
+let port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 
@@ -38,11 +38,11 @@ app.get('/todos/:id', (req, res) => {
         return res.status(400).send("The request does not have necesary params.");
     }
     if (!ObjectID.isValid(id)) {
-        return res.status(404).send("Id not found");
+        return res.status(404).send();
     }
     Todo.findById(id).then((todo) => {
         if (!todo) {
-            return res.status(404).send("Id not found");
+            return res.status(404).send();
         }
         return res.status(200).send(todo);
     }).catch((err) => res.status(400).send());

@@ -4,8 +4,12 @@
     "description": "A API for ToDo App.",
     "main": "index.js",
     "scripts": {
+        "start": "node server/server.js",
         "test": "jest",
         "test-watch": "nodemon --exec \"npm test\""
+    },
+    "engines": {
+        "node": "10.13.0"
     },
     "author": "",
     "license": "ISC",
