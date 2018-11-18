@@ -48,8 +48,39 @@ userSchema.methods.generateAuthToken = function() {
         token
     });
 
+    //this.tokens = this.tokens.concat([{ access, token }]);
+
     return this.save().then(() => {
         return token;
+    });
+}
+
+userSchema.statics.findByToken = function(token) {
+    // let decoded;
+    // let User = this;
+    // try {
+    //     decoded = jwt.verify(token, 'abc123');
+    // } catch (e) {
+    //     return Promise.reject();
+    // }
+    // return this.find({
+    //     '_id': decoded._id,
+    //     'tokens.token': token,
+    //     'tokens.access': 'auth'
+    // });
+    var User = this;
+    var decoded;
+
+    try {
+        decoded = jwt.verify(token, 'abc123');
+    } catch (e) {
+        return Promise.reject();
+    }
+
+    return User.findOne({
+        '_id': decoded._id,
+        'tokens.token': token,
+        'tokens.access': 'auth'
     });
 }
 
